@@ -80,14 +80,15 @@ class BlackjackServer:
         # Allow reusing the address (helpful when restarting server quickly)
         self.tcp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         
-        # Bind to the correct network interface (avoids WSL/VirtualBox adapters)
-        self.local_ip = get_local_ip()
-        self.tcp_socket.bind((self.local_ip, self.tcp_port))
+        # Bind to all interfaces so client can connect via any IP
+        # (hotspot networks may route UDP and TCP through different interfaces)
+        self.local_ip = ''
+        self.tcp_socket.bind(('', self.tcp_port))
         
         # Start listening for connections (queue up to 5)
         self.tcp_socket.listen(5)
         
-        # Get the actual port (useful if we passed 0 to let OS choose)
+        # Get the actual port 
         self.tcp_port = self.tcp_socket.getsockname()[1]
         
         print(f"Server started on {self.local_ip or 'all interfaces'}:{self.tcp_port}")
