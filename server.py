@@ -122,7 +122,7 @@ class BlackjackServer:
         while self.running:
             try:
                 # Send offer to broadcast address on the UDP port
-                self.udp_socket.sendto(offer_packet, ('<broadcast>', UDP_BROADCAST_PORT))
+                self.udp_socket.sendto(offer_packet, ('255.255.255.255', UDP_BROADCAST_PORT))
                 print(f"Server sending offers...")
             except Exception as e:
                 print(f"Broadcast error: {e}")
